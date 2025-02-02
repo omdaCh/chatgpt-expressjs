@@ -1,0 +1,2 @@
+# ignore .env since it has openAi keys
+.env
