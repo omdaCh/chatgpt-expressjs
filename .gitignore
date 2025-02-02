@@ -1,2 +1,5 @@
 # ignore .env since it has openAi keys
 .env
+
+# ignore node modules
+/node_modules
