@@ -40,11 +40,9 @@ exports.sendMessageOnStream = async (req, res) => {
         const runStream = await messageService.sendStreamMessage(threadId, assistantId);
 
         for await (const chunk of runStream) {
-            // console.log('chunk = '+JSON.stringify(chunk));
             if (chunk.event === 'thread.message.delta') {
                 const token = chunk.data?.delta?.content[0]?.text?.value;
                 if (token && token.length !== 0) {
-                    // console.log('token = ' + token);
                     res.write(`data: ${JSON.stringify({ token })}\n\n`);
                 } else {
                     console.log('Token is undefined or empty');

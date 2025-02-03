@@ -14,7 +14,7 @@ async function sendMessage(message) {
                 content: message,
             },
         ],
-        max_tokens: 20,
+        max_tokens: 5,
         stop: ",",
         n: 2,
         logprobs: true

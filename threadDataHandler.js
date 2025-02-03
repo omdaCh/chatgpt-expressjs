@@ -12,9 +12,9 @@ function readThreads() {
 }
 
 // Function to save thread IDs to the JSON file
-function saveThread(threadId, createdAt, first_message) {
+function saveThread(threadId, createdAt, title) {
     const threads = readThreads();
-    threads.push({ "thread_id": threadId, "created_at": createdAt, "title": first_message }); // Add the new thread ID
+    threads.push({ "thread_id": threadId, "created_at": createdAt, "title": title }); // Add the new thread ID
     fs.writeFileSync(threadsFilePath, JSON.stringify(threads, null, 2)); // Save to file
 }
 

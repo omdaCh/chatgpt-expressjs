@@ -1,6 +1,19 @@
 const { readThreads } = require('../threadDataHandler');
 const threadServices = require('../services/threadServices');
 
+exports.createNewThread = async (req, res) => {
+    try {
+        const { threadFirstMessage } = req.body;
+        const newThread = await threadServices.createNewThread(threadFirstMessage);
+        res.json(newThread);
+    }
+    catch(error){
+        console.log('Error creating new thread')
+        res.status(500).json({ error: 'Failed to create new thread' });
+    }
+   
+}
+
 exports.getThreads = (req, res) => {
     const threads = readThreads();
     res.json(threads);

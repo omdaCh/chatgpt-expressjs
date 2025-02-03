@@ -1,10 +1,37 @@
-const { readThreads, deleteThread, saveThreads } = require('../threadDataHandler')
+const { readThreads, deleteThread, saveThreads, saveThread } = require('../threadDataHandler')
 
 const { OpenAI } = require("openai");
 require('dotenv').config();
 const apiKey = process.env.API_KEY;
 
-const openai = new OpenAI({ apiKey: apiKey })
+const openai = new OpenAI({ apiKey: apiKey });
+
+exports.createNewThread = async (threadFirst_message) => {
+    const newThread = await openai.beta.threads.create();
+    const threadTitle = threadFirst_message;
+    if (countWords(threadFirst_message) > 10) {
+        const completion = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                {
+                    role: "system",
+                    content: "You are a helpful assistant. Generate a short and concise title (maximum 5 words) for a chat thread based on the following message:",
+                },
+                {
+                    role: "user",
+                    content: threadFirst_message,
+                },
+            ],
+            max_tokens: 15,
+            temperature: 0.7,
+        });
+        threadTitle = completion.choices[0].message.content.trim();
+    }
+
+
+    saveThread(newThread.id, newThread.created_at, threadTitle);
+    return { "thread_id": newThread.id, "created_at": newThread.created_at, "title": threadTitle };
+}
 
 exports.deleteThread = async (threadId) => {
     await openai.beta.threads.del(threadId);
@@ -29,3 +56,8 @@ exports.updateThreadTitle = ({ thread_id, title }) => {
 
     saveThreads(threads);
 };
+
+function countWords(str) {
+    return str.trim().split(/\s+/).filter(word => word.length > 0).length;
+}
+

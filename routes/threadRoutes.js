@@ -4,6 +4,7 @@ const threadController = require('../controllers/threadController')
 
 const router = express.Router();
 
+router.post('/create-new-thread', threadController.createNewThread);
 
 router.get('/', threadController.getThreads);
 
