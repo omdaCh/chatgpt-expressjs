@@ -34,8 +34,7 @@ exports.updateThreadTitle = (req, res) => {
     try {
         const { thread_id, title } = req.body;
         threadServices.updateThreadTitle({ thread_id, title });
-        const updatedThread = threadServices.getThread(thread_id);
-        res.json({ message: 'Thread title updated successfully', thread: updatedThread });
+        res.json({ message: 'Thread title updated successfully'});
     } catch (error) {
         console.error('Error updating thread title:', error);
         res.status(500).json({ error: 'Failed to update thread title' });

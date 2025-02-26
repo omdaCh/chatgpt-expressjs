@@ -28,14 +28,24 @@ exports.createNewThread = async (threadFirst_message) => {
         threadTitle = completion.choices[0].message.content.trim();
     }
 
-
     saveThread(newThread.id, newThread.created_at, threadTitle);
     return { "thread_id": newThread.id, "created_at": newThread.created_at, "title": threadTitle };
 }
 
 exports.deleteThread = async (threadId) => {
-    await openai.beta.threads.del(threadId);
-    deleteThread(threadId);
+
+    try {
+        await openai.beta.threads.del(threadId);
+        deleteThread(threadId);
+    } catch (error) {
+        if (error.message.includes("404 No thread found with id")) {
+            deleteThread(threadId);
+        } else {
+            console.error('Error deleting thread from openai:', error);
+        }
+
+    }
+
 };
 
 exports.updateThreadTitle = ({ thread_id, title }) => {

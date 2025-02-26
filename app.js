@@ -1,11 +1,9 @@
-
 const cors = require('cors');
 const express = require('express')
 
 const threadRoutes = require('./routes/threadRoutes');
-
 const messageRoutes = require('./routes/messageRoutes');
-
+const fileRoutes = require('./routes/fileRoutes');
 
 const app = express();
 
@@ -22,6 +20,8 @@ app.use(cors({
 app.use('/threads', threadRoutes);
 
 app.use('/messages', messageRoutes);
+
+app.use('/files', fileRoutes);
 
 const port = 3000;
 
