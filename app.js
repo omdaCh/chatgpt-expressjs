@@ -1,5 +1,9 @@
 const cors = require('cors');
-const express = require('express')
+
+
+
+
+const express = require('express');
 
 const threadRoutes = require('./routes/threadRoutes');
 const messageRoutes = require('./routes/messageRoutes');
@@ -11,11 +15,12 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
-  origin: 'http://localhost:4200', // Allow requests from this origin
-  methods: ['GET', 'PUT', 'POST', 'DELETE'], // Allow only specified HTTP methods
-  credentials: true, // Allow cookies and credentials (if needed)
-}));
+const allowedOrigins = [
+  'http://localhost:4200', // Local development
+  'https://chatgpt-with-angular.firebaseapp.com/' // Deployed Angular app
+];
+
+app.use(cors());
 
 app.use('/threads', threadRoutes);
 
