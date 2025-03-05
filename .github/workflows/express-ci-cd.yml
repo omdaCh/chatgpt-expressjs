@@ -3,10 +3,10 @@ name: Express.js CI/CD to Render
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   ci:
@@ -23,10 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-    #   - name: Deploy to Render
+      - name: Deploy to Render
         # Only run this step if the branch is master
-        # if: github.ref == 'refs/heads/master'
-        # env:
-        #   deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        # run: |
-        #   curl "$deploy_url"
+        if: github.ref == 'refs/heads/master'
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl "$deploy_url"
