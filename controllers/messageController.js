@@ -57,11 +57,11 @@ exports.sendMessageOnStream = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error treating the message:', error);
+        console.error('Error treating  the message:', error);
         res.status(500).json({ error: 'Failed to treat the message' });
     }
     finally {
-        messageService.removeStream(threadId);
+        // messageService.removeStream(threadId);
     }
 }
 

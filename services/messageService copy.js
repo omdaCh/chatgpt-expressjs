@@ -60,6 +60,8 @@ exports.sendStreamMessage = async (threadId, assistantId) => {
         // max_prompt_tokens: 256
     });
 
+    activeStreams.set(threadId, runStream);
+
     handleRunStream(runStream, threadId);
 
     return eventEmitter;
@@ -68,12 +70,7 @@ exports.sendStreamMessage = async (threadId, assistantId) => {
 async function handleRunStream(stream, threadId) {
     let switchingToToolOutputStream = false;
     for await (const chunk of stream) {
-        if (chunk.event === "thread.run.created") {
-            if (activeStreams.get(threadId) !== null) {
-                const runId = chunk.data.id;
-                activeStreams.set(threadId, runId);
-            }
-        }
+        // console.log('chunk = ' + JSON.stringify(chunk));
         if (chunk.event === 'thread.message.delta') {
             const token = chunk.data?.delta?.content[0]?.text?.value;
             if (token && token.length !== 0) {
@@ -81,6 +78,9 @@ async function handleRunStream(stream, threadId) {
             } else {
                 console.log('Token is undefined or empty');
             }
+        } else if (chunk.event === 'thread.run.created') {
+            runId = chunk.data.id
+            // console.log('Thread run created:', chunk.data);
         } else if (chunk.event === 'thread.run.requires_action') {
 
             // Extract the function call details
@@ -117,8 +117,8 @@ async function handleRunStream(stream, threadId) {
 
                 handleRunStream(assistantStream, threadId);
             }
-        } else if (chunk.event === 'thread.message.completed') {
-            activeStreams.delete(threadId);
+        }
+        else if (chunk.event === 'thread.message.completed') {
             eventEmitter.emit(`response-object-${threadId}`, chunk.data);
         }
     }
@@ -161,14 +161,11 @@ async function analyzeImage(file_id, question) {
 
 exports.stopMessageStream = async (threadId) => {
 
-    const runStreamID = activeStreams.get(threadId);
+    const runStream = activeStreams.get(threadId);
 
-    if (runStreamID) {
-        await openai.beta.threads.runs.cancel(
-            threadId,
-            runStreamID
-        );
-        activeStreams.delete(threadId);
+    if (runStream) {
+        runStream.destroy(); // Stop the stream
+        activeStreams.delete(threadId); // Remove the stream reference
         return { success: true, message: 'Stream stopped successfully' };
     } else {
         return { success: false, message: 'No active stream found for the given threadId' };

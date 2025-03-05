@@ -36,7 +36,7 @@ exports.createFile = async (req, res) => {
             fileService.deleteTempFile(filePath);
 
             // Send the OpenAI file object as the response
-            res.status(200).json({ message: 'File uploaded successfully', file });
+            res.status(200).json(file);
         });
     } catch (error) {
         console.error('Error in uploadFile controller:', error);
