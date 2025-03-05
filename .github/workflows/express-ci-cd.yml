@@ -23,13 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-    #   - name: Run tests
-    #     run: npm test || echo "No tests configured"
-
-      - name: Deploy to Render
+    #   - name: Deploy to Render
         # Only run this step if the branch is master
-        if: github.ref == 'refs/heads/master'
-        env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: |
-          curl "$deploy_url"
+        # if: github.ref == 'refs/heads/master'
+        # env:
+        #   deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        # run: |
+        #   curl "$deploy_url"
