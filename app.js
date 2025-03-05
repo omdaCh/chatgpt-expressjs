@@ -22,7 +22,7 @@ const allowedOrigins = [
 
 app.use(cors());
 
-app.use('/threads', threadRoutes);
+app.use('/threadss', threadRoutes);
 
 app.use('/messages', messageRoutes);
 
