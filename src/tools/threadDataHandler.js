@@ -25,9 +25,7 @@ function saveThreads(threads) {
 function deleteThread(threadId) {
     const threads = readThreads();
     const updatedThreads = threads.filter(thread => thread.thread_id !== threadId);
-
     saveThreads(updatedThreads);
 }
-
 
 module.exports = { readThreads, saveThreads, saveThread, deleteThread };
