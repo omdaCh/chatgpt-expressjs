@@ -5,9 +5,9 @@ const cors = require('cors');
 
 const express = require('express');
 
-const threadRoutes = require('./routes/threadRoutes');
-const messageRoutes = require('./routes/messageRoutes');
-const fileRoutes = require('./routes/fileRoutes');
+const threadRoutes = require('./src/routes/threadRoutes');
+const messageRoutes = require('./src/routes/messageRoutes');
+const fileRoutes = require('./src/routes/fileRoutes');
 
 const app = express();
 
