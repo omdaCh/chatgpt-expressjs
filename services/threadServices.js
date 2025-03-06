@@ -1,4 +1,4 @@
-const { readThreads, deleteThread, saveThreads, saveThread } = require('../threadDataHandler')
+const { readThreads, deleteThread, saveThreads, saveThread } = require('../tools/threadDataHandler')
 
 const { OpenAI } = require("openai");
 require('dotenv').config();

@@ -1,4 +1,4 @@
-const { readThreads } = require('../threadDataHandler');
+const { readThreads } = require('../tools/threadDataHandler');
 const threadServices = require('../services/threadServices');
 
 exports.createNewThread = async (req, res) => {
