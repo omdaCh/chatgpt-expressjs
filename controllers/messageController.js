@@ -1,8 +1,5 @@
 const messageService = require('../services/messageService');
-const { OpenAI } = require("openai");
 require('dotenv').config();
-const apiKey = process.env.API_KEY;
-const openai = new OpenAI({ apiKey: apiKey });
 
 
 exports.getThreadMessages = async (req, res) => {

@@ -15,10 +15,7 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-const allowedOrigins = [
-  'http://localhost:4200', // Local development
-  'https://chatgpt-with-angular.firebaseapp.com/' // Deployed Angular app
-];
+
 
 app.use(cors());
 

@@ -29,8 +29,5 @@ function deleteThread(threadId) {
     saveThreads(updatedThreads);
 }
 
-function getThread(thread_id) {
-    return threads.find(thread => thread.thread_id === thread_id);
-}
 
-module.exports = { readThreads, saveThreads, saveThread, deleteThread, getThread };
+module.exports = { readThreads, saveThreads, saveThread, deleteThread };

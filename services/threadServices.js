@@ -8,7 +8,7 @@ const openai = new OpenAI({ apiKey: apiKey });
 
 exports.createNewThread = async (threadFirst_message) => {
     const newThread = await openai.beta.threads.create();
-    const threadTitle = threadFirst_message;
+    let threadTitle = threadFirst_message;
     if (countWords(threadFirst_message) > 10) {
         const completion = await openai.chat.completions.create({
             model: "gpt-4o-mini",
@@ -50,16 +50,12 @@ exports.deleteThread = async (threadId) => {
 
 exports.updateThreadTitle = ({ thread_id, title }) => {
 
-    if (!thread_id || !title) {
-        return res.status(400).json({ error: 'Thread ID and title are required' });
-    }
-
     const threads = readThreads();
 
     const threadIndex = threads.findIndex((thread) => thread.thread_id === thread_id);
 
     if (threadIndex === -1) {
-        return res.status(404).json({ error: 'Thread not found' });
+        throw new Error(`Thread not found : ${thread_id}`)
     }
 
     threads[threadIndex].title = title;

@@ -1,5 +1,5 @@
 
 
-exports.getAssistants = (req,res) => {
+// exports.getAssistants = (req,res) => {
     
-}
+// }

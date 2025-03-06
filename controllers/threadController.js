@@ -7,11 +7,11 @@ exports.createNewThread = async (req, res) => {
         const newThread = await threadServices.createNewThread(threadFirstMessage);
         res.json(newThread);
     }
-    catch(error){
-        console.log('Error creating new thread')
+    catch (error) {
+        console.log('Error creating new thread : ', error)
         res.status(500).json({ error: 'Failed to create new thread' });
     }
-   
+
 }
 
 exports.getThreads = (req, res) => {
@@ -33,8 +33,13 @@ exports.deleteThread = async (req, res) => {
 exports.updateThreadTitle = (req, res) => {
     try {
         const { thread_id, title } = req.body;
+
+        if (!thread_id || !title) {
+            return res.status(400).json({ error: 'Thread ID and title are required' });
+        }
+
         threadServices.updateThreadTitle({ thread_id, title });
-        res.json({ message: 'Thread title updated successfully'});
+        res.json({ message: 'Thread title updated successfully' });
     } catch (error) {
         console.error('Error updating thread title:', error);
         res.status(500).json({ error: 'Failed to update thread title' });

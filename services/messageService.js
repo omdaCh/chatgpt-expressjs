@@ -29,16 +29,14 @@ exports.sendMessage = async (threadId, assistantId, userMessage) => {
         // max_prompt_tokens: 256
     });
 
-    // const run = await openai.beta.threads.runs.create(threadId, { assistant_id: assistantId });
 
     let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
     while (runStatus.status !== 'completed') {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
-        console.log('Run status:', runStatus.status);
 
         if (runStatus.status === 'failed' || runStatus.status === 'expired') {
-            return res.status(500).json({ error: 'Run failed or expired', details: runStatus });
+            throw new Error(`OpenAI run failed with status: ${runStatus.status}`);
         }
     }
 
@@ -126,7 +124,6 @@ async function handleRunStream(stream, threadId) {
     //in this case the SubmitToolOutputs stream will be the response stream 
     if (!switchingToToolOutputStream) {
         eventEmitter.emit(`end-${threadId}`);
-        strmResponseMessageId = null;
     }
 
 }
