@@ -6,7 +6,7 @@
         "request": "launch",
         "name": "Debug Express App",
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/nodemon",
-        "program": "${workspaceFolder}/app.js",
+        "program": "${workspaceFolder}/src/app.js",
         "restart": true,
         "console": "integratedTerminal",
         "internalConsoleOptions": "neverOpen",
