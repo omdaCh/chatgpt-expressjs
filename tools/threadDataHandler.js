@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const threadsFilePath = path.join(__dirname, './data/threads.json');
+const threadsFilePath = path.join(__dirname, '../data/threads.json');
 
 // Function to read thread IDs from the JSON file
 function readThreads() {
