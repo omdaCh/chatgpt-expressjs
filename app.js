@@ -1,7 +1,7 @@
 const cors = require('cors');
 
 const express = require('express'); 
-// require('./src/config/db'); 
+require('./src/config/db'); 
 
 require("dotenv").config();
 
@@ -32,3 +32,5 @@ if (require.main === module) {
     console.log(`OmdaGPT App listening on port ${port}`)
   });
 }
+
+module.exports = app;
