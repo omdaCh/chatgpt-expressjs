@@ -1,10 +1,10 @@
-const { readThreads } = require('../tools/threadDataHandler');
+// const { readThreads } = require('../tools/threadDataHandler');
 const threadService = require('../services/threadService');
 
 exports.createNewThread = async (req, res) => {
     try {
         const { threadFirstMessage } = req.body;
-        const newThread = await threadServices.createNewThread(threadFirstMessage);
+        const newThread = await threadService.createNewThread(threadFirstMessage);
         res.json(newThread);
     }
     catch (error) {
@@ -14,16 +14,16 @@ exports.createNewThread = async (req, res) => {
 
 }
 
-exports.getThreads = (req, res) => {
-    // const threads = readThreads();
-    const threads = threadService.getThreads();
+exports.getThreads = async (req, res) => {
+    const threads =  await threadService.getThreadsFromMongo();
+    // const threads =  await threadService.getThreads();
     res.json(threads);
 }
 
 exports.deleteThread = async (req, res) => {
     try {
         const threadId = req.params.threadId;
-        threadServices.deleteThread(threadId);
+        threadService.deleteThread(threadId);
         res.json({ message: `Thread ${threadId} deleted successfully ` });
     } catch (error) {
         console.error('Error deleting thread:', error);
@@ -39,7 +39,7 @@ exports.updateThreadTitle = (req, res) => {
             return res.status(400).json({ error: 'Thread ID and title are required' });
         }
 
-        threadServices.updateThreadTitle({ thread_id, title });
+        threadService.updateThreadTitle({ thread_id, title });
         res.json({ message: 'Thread title updated successfully' });
     } catch (error) {
         console.error('Error updating thread title:', error);

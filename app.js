@@ -1,7 +1,7 @@
 const cors = require('cors');
 
 const express = require('express'); 
-const mongoose = require('./src/config/db'); 
+// require('./src/config/db'); 
 
 require("dotenv").config();
 
@@ -18,8 +18,6 @@ app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-
-
 app.use(cors());
 
 app.use('/threads', threadRoutes);
@@ -29,6 +27,8 @@ app.use('/messages', messageRoutes);
 app.use('/files', fileRoutes);
 
 
-app.listen(port, () => {
-  console.log(`OmdaGPT App listening on port ${port}`)
-})
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`OmdaGPT App listening on port ${port}`)
+  });
+}

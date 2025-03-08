@@ -1,5 +1,6 @@
 const  MngThread  = require('../models/threadSchema');
 const { readThreads, deleteThread, saveThreads, saveThread } = require('../tools/threadDataHandler')
+const threadDataHandler = require('../tools/threadDataHandler');
 
 const { OpenAI } = require("openai");
 require('dotenv').config();
@@ -7,9 +8,19 @@ const apiKey = process.env.API_KEY;
 
 const openai = new OpenAI({ apiKey: apiKey });
 
-exports.getThreads = async () => {
+exports.getThreadsFromMongo = async () => {
     try {
         const threads = await MngThread.find();
+        return threads;
+    } catch (error) {
+        console.log('error finding threads = ' , error);
+        throw new Error('Error getting threads from mongodb')
+    }
+}
+
+exports.getThreads = async () => {
+    try {
+        const threads = threadDataHandler.readThreads();
         return threads;
     } catch (error) {
         console.log('error finding threads = ' , error);
