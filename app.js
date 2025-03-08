@@ -1,9 +1,12 @@
 const cors = require('cors');
 
+const express = require('express'); 
+const mongoose = require('./src/config/db'); 
 
+require("dotenv").config();
 
+const port = process.env.PORT | 3000;
 
-const express = require('express');
 
 const threadRoutes = require('./src/routes/threadRoutes');
 const messageRoutes = require('./src/routes/messageRoutes');
@@ -25,7 +28,6 @@ app.use('/messages', messageRoutes);
 
 app.use('/files', fileRoutes);
 
-const port = 3000;
 
 app.listen(port, () => {
   console.log(`OmdaGPT App listening on port ${port}`)
