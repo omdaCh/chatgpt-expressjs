@@ -1,28 +1,30 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const MONGODB_URI = process.env.MONGODB_URI;
+console.log('Regular db.js');
 
-exports.connect = () => {
-if (!MONGODB_URI) {
-    console.error("MongoDB URI is missing. Check your .env file.");
-    process.exit(1);
-}
+const connectDB = async () => {
+    const MONGODB_URI = process.env.MONGODB_URI;
 
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => {
-        console.error("MongoDB connection error:", err);
+    console.log('calling connectDB on Regular db.js');
+
+    if (!MONGODB_URI) {
+        console.error("MongoDB URI is missing. Check your .env file.");
         process.exit(1);
-    });
+    }
 
-mongoose.connection.on("error", (err) => {
-    console.error("MongoDB connection error (event):", err);
-});
-
-mongoose.connection.on("disconnected", () => {
-    console.warn("MongoDB disconnected!");
-});
+    await mongoose.connect(MONGODB_URI)
+        .then(() => console.log("MongoDB connected"))
+        .catch((err) => {
+            console.error("MongoDB connection error: ", err);
+            process.exit(1);
+        });
 }
 
-module.exports = mongoose;
+const disconnectDB = async () => {
+
+}
+
+
+
+module.exports = { mongoose, connectDB,disconnectDB };

@@ -1,32 +1,24 @@
-const  MngThread  = require('../models/threadSchema');
-const { readThreads, deleteThread, saveThreads, saveThread } = require('../tools/threadDataHandler')
-const threadDataHandler = require('../tools/threadDataHandler');
+const MngThread = require('../models/threadSchema');
 
 const { OpenAI } = require("openai");
+
+const { mongoose } = require('../config/db');
+
 require('dotenv').config();
 const apiKey = process.env.API_KEY;
 
 const openai = new OpenAI({ apiKey: apiKey });
 
-exports.getThreadsFromMongo = async () => {
+exports.getThreads = async () => {
     try {
         const threads = await MngThread.find();
         return threads;
     } catch (error) {
-        console.log('error finding threads = ' , error);
+        console.log('error finding threads = ', error);
         throw new Error('Error getting threads from mongodb')
     }
 }
 
-exports.getThreads = async () => {
-    try {
-        const threads = threadDataHandler.readThreads();
-        return threads;
-    } catch (error) {
-        console.log('error finding threads = ' , error);
-        throw new Error('Error getting threads from mongodb')
-    }
-}
 
 exports.createNewThread = async (threadFirst_message) => {
     const newThread = await openai.beta.threads.create();
@@ -50,39 +42,28 @@ exports.createNewThread = async (threadFirst_message) => {
         threadTitle = completion.choices[0].message.content.trim();
     }
 
-    saveThread(newThread.id, newThread.created_at, threadTitle);
+    let mngThread = new MngThread({ "thread_id": newThread.id, "created_at": newThread.created_at, "title": threadTitle })
+    await mngThread.save();
+
     return { "thread_id": newThread.id, "created_at": newThread.created_at, "title": threadTitle };
 }
 
 exports.deleteThread = async (threadId) => {
-
-    try {
-        await openai.beta.threads.del(threadId);
-        deleteThread(threadId);
-    } catch (error) {
-        if (error.message.includes("404 No thread found with id")) {
-            deleteThread(threadId);
-        } else {
-            console.error('Error deleting thread from openai:', error);
-        }
-
-    }
-
+    await openai.beta.threads.del(threadId);
+    await MngThread.deleteOne({ thread_id: threadId });
 };
 
-exports.updateThreadTitle = ({ thread_id, title }) => {
-
-    const threads = readThreads();
-
-    const threadIndex = threads.findIndex((thread) => thread.thread_id === thread_id);
-
-    if (threadIndex === -1) {
-        throw new Error(`Thread not found : ${thread_id}`)
+exports.updateThreadTitle = async (threadId, newTitle) => {
+    const result = await MngThread.updateOne(
+        { thread_id: threadId },
+        { $set: { title: newTitle } });
+    if (result.matchedCount === 0) {
+        console.log('Thread not found');
+        throw new Error('Thread not found');
     }
 
-    threads[threadIndex].title = title;
-
-    saveThreads(threads);
+    console.log('update successful:', result);
+    return result;
 };
 
 function countWords(str) {

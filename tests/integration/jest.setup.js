@@ -1,0 +1,1 @@
+jest.doMock('../../src/config/db', () => require('./db'));

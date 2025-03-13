@@ -1,7 +1,7 @@
 const cors = require('cors');
 
-const express = require('express'); 
-require('./src/config/db'); 
+const express = require('express');
+const { connectDB } = require('./src/config/db');
 
 require("dotenv").config();
 
@@ -26,10 +26,12 @@ app.use('/messages', messageRoutes);
 
 app.use('/files', fileRoutes);
 
+connectDB();  
 
 if (require.main === module) {
   app.listen(port, () => {
-    console.log(`OmdaGPT App listening on port ${port}`)
+    console.log(`OmdaGPT App listening on port ${port}`);
+    
   });
 }
 
