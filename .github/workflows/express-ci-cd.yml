@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # - name: run lint
-      #   run: npx eslint
+      - name: run lint
+        run: npx eslint
 
       - name: Deploy to Render
         # Only run this step if the branch is main

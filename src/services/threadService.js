@@ -2,7 +2,6 @@ const MngThread = require('../models/threadSchema');
 
 const { OpenAI } = require("openai");
 
-const { mongoose } = require('../config/db');
 
 require('dotenv').config();
 const apiKey = process.env.API_KEY;
